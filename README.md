@@ -11,6 +11,55 @@ Para sistemas Linux basados en Debian o Ubuntu, necesitas instalar las siguiente
 sudo apt install python3-bs4 python3-markdown python3-tk tk-dev
 ```
 
+## Consejos para tener en cuenta en el archivo markdown
+1.- Cuando usted copie ejemplo un codigo así
+
+```python
+import requests
+
+def check_requests():
+    try:
+```
+
+borrele el python para que quede así:
+
+```
+import requests
+
+def check_requests():
+    try:
+```
+
+lo mismo haga si ve la palbra:
+
+bash
+
+borrela
+
+porque después en la conversión se pasa al código y no le funcionará lo que copie de la caja
+
+2.- Cuando vea una lista que no esté hecha de viñetas y estén juntas las palabras, ejemplo:
+
+/home/wachin/Descargas
+/home/wachin/Documentos
+/home/wachin/Escritorio
+/home/wachin/Música
+etc
+
+al final de cada línea coloque dos espacios vaciós:
+
+/home/wachin/Descargas
+/home/wachin/Documentos
+/home/wachin/Escritorio
+/home/wachin/Música
+etc
+
+porque sino le aparecerá así:
+
+/home/wachin/Descargas /home/wachin/Documentos /home/wachin/Escritorio /home/wachin/Música etc
+
+Y esto también ocurrirá en Github, por eso es un buen consejo.
+
 ## Instalación
 1. Asegúrate de tener Python 3 instalado en tu sistema.
 2. Instala las dependencias mencionadas en los requisitos previos.
@@ -20,11 +69,15 @@ sudo apt install python3-bs4 python3-markdown python3-tk tk-dev
 
 ### Inicio
 1. Abre una terminal en la carpeta donde se encuentra el script.
+
 2. Ejecuta el programa con el comando:
    ```
    python3 mdtoblogger.py
    ```
-3. Se abrirá una ventana con la interfaz gráfica del conversor.
+   
+3. Se abrirá una ventana con la interfaz gráfica del conversor:
+
+![](src/vx_images/01-lanzando-py-md-to-blogger.png)
 
 ### Selección de Archivos
 1. **Archivo de entrada (.md)**: 
