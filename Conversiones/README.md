@@ -81,7 +81,7 @@ deactivate
 Ahora creemos un script en python para que por medio del paquete requests probar si funciona el entorno virtual VENV correctamente, el código es el siguiente:
 
 
-```python
+```
 import requests
 
 def check_requests():
