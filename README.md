@@ -150,7 +150,7 @@ Guardar configuración
 
 repito la captura:
 
-![https://raw.githubusercontent.com/wachin/Py_MD_to_HTML_Blogger/main/src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp](https://raw.githubusercontent.com/wachin/Py_MD_to_HTML_Blogger/main/src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp)
+<img src="https://raw.githubusercontent.com/wachin/Py_MD_to_HTML_Blogger/main/src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp" width="700" alt="Descripción de la imagen">
 
 también añado una captura por Shutter:
 
