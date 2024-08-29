@@ -89,6 +89,10 @@ pongo una imagen para mejor entendimiento:
 
 ![](src/vx_images/03-md_to_blogger.py-abierto.webp)
 
+acá otra imagen:
+
+![](src/vx_images/05-lanzandolo-desde-la-terminal.png)
+
 como muestra la imagen de clic en "Selección" y se abrirá automáticamente la carpeta "Conversiones" en la raíz del proyecto y debe buscar y cargar su archivo markdown .md 
 
 **Archivo de salida (.html)**:
