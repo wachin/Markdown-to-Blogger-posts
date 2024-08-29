@@ -148,7 +148,12 @@ Guardar configuración
 
 ![](src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp)
 
+también añado una captura por Shutter:
+
+![](src/vx_images/06-shutter-lanzandolo-desde-la-terminal.png)
+
 ### Resultado
+
 - El archivo HTML generado se guardará en la ubicación especificada en "Archivo de salida (.html)".
 - Este archivo estará optimizado para su uso en Blogger, incluyendo una caja de código personalizada para los bloques de código.
 
