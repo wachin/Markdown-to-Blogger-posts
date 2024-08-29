@@ -142,6 +142,8 @@ Guardar configuración
 2. El programa procesará el archivo Markdown y generará el HTML correspondiente.
 3. Cuando la conversión se complete (es muy rapida), verás el mensaje "Conversión completada" en la parte inferior de la ventana.
 
+![](src/vx_images/04-md_to_blogger.py-conversion-realizada.webp)
+
 ### Resultado
 - El archivo HTML generado se guardará en la ubicación especificada en "Archivo de salida (.html)".
 - Este archivo estará optimizado para su uso en Blogger, incluyendo una caja de código personalizada para los bloques de código.
