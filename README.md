@@ -148,6 +148,10 @@ Guardar configuración
 
 ![](src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp)
 
+repito la captura:
+
+![https://raw.githubusercontent.com/wachin/Py_MD_to_HTML_Blogger/main/src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp](https://raw.githubusercontent.com/wachin/Py_MD_to_HTML_Blogger/main/src/vx_images/04-md_to_blogger.py-conversion-realizada-2.webp)
+
 también añado una captura por Shutter:
 
 ![](src/vx_images/06-shutter-lanzandolo-desde-la-terminal.png)
