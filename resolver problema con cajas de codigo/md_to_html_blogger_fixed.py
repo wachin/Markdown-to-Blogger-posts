@@ -5,6 +5,8 @@ import re
 from bs4 import BeautifulSoup
 import os
 import json
+from typing import List, Tuple
+
 
 # Función para cargar la configuración
 # Esta función verifica si existe un archivo de configuración llamado 'save.json'.
@@ -125,25 +127,61 @@ def convert_markdown_to_blogger():
         return '\n'.join(html_lines)
 
     markdown_content = convert_lists_to_html(markdown_content)
+    
+    
+    def extract_code_blocks(self, text: str) -> List[Tuple[str, str]]:
+        """
+        Extrae los bloques de código y los reemplaza con marcadores únicos.
+        Retorna una lista de tuplas (marcador, contenido del código).
+        """
+        code_blocks = []
+        pattern = r'```(?:\w+)?\n(.*?)```'
+        
+        def replacement(match):
+            marker = f'__CODE_BLOCK_{len(code_blocks)}__'
+            # Eliminar la última línea vacía si existe
+            code_content = match.group(1).rstrip()
+            code_blocks.append((marker, code_content))
+            return marker
+        
+        processed_text = re.sub(pattern, replacement, text, flags=re.DOTALL)
+        return processed_text, code_blocks
 
-    # Patrón para bloques de código rodeados por ```
-    code_block_pattern = re.compile(r'```(.*?)```', re.DOTALL)
+    def convert_paragraphs(self, text: str) -> str:
+        """Convierte párrafos de texto normal."""
+        paragraphs = text.split('\n\n')
+        converted = []
+        
+        for p in paragraphs:
+            if p.strip() and not p.startswith('__CODE_BLOCK_'):
+                converted.append(f'<p>{p.strip()}</p>')
+            else:
+                converted.append(p)
+                
+        return '\n'.join(converted)
 
-    def replace_code_block(match):
-        # Convierte el contenido del bloque de código en una caja de estilo HTML.
-        code = match.group(1).strip()
-        code = re.sub(r'&', '&amp;', code)
-        code = re.sub(r'<', '&lt;', code)
-        code = re.sub(r'>', '&gt;', code)
-        code = re.sub(r'"', '&quot;', code)
-        code = re.sub(r"'", '&#39;', code)
-        return code_box_entry.get().format(code=code)
+    def format_code_block(self, code_content: str) -> str:
+        """Formatea un bloque de código en HTML con el estilo apropiado."""
+        # Dividir las líneas y mantener la continuación de línea
+        lines = code_content.split('\n')
+        formatted_lines = []
+        
+        for i, line in enumerate(lines):
+            line = line.rstrip()
+            if line.endswith('\\'):
+                formatted_lines.append(f'<code>{line}<br /></code>')
+            else:
+                if i < len(lines) - 1:  # No es la última línea
+                    formatted_lines.append(f'<code>{line}<br /></code>')
+                else:  # Última línea
+                    formatted_lines.append(f'<code>{line}</code>')
+        
+        return f'<pre class="linux-code" style="{self.code_block_style}">' + \
+               ''.join(formatted_lines) + '</pre>'    
 
-    markdown_content = re.sub(code_block_pattern, replace_code_block, markdown_content)
-    markdown_content = re.sub(r'`([^`]+)`', r'<b>\1</b>', markdown_content)
-    html_content = markdown.markdown(markdown_content, extensions=['fenced_code', 'tables'])
+        html_content = markdown.markdown(markdown_content, extensions=['fenced_code', 'tables'])
 
-    soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, 'html.parser')
 
     # Procesar tablas
     for table in soup.find_all('table'):
