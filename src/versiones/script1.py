@@ -57,4 +57,4 @@ def convert_markdown_to_blogger(html_file, markdown_file):
         html_out.write(modified_html)
 
 # Ejemplo de uso
-convert_markdown_to_blogger('output.html', 'input.md')
+convert_markdown_to_blogger('output.html', 'Algunos estudios indican que hay mas prevalencia de artritis con H. pylori.md')

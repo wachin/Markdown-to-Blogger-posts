@@ -65,6 +65,50 @@ def convert_markdown_to_blogger():
     with open(input_file, 'r', encoding='utf-8') as md_file:
         markdown_content = md_file.read()
 
+    # Detectar y convertir listas en el Markdown manualmente
+    def convert_lists_to_html(md_content):
+        lines = md_content.splitlines()
+        html_lines = []
+        in_ul = False
+        in_ol = False
+
+        for line in lines:
+            line = line.rstrip()
+
+            if re.match(r'^\s*[-*]\s+', line):  # Detectar listas no ordenadas
+                if not in_ul:
+                    if in_ol:
+                        html_lines.append('</ol>')
+                        in_ol = False
+                    html_lines.append('<ul style="text-align: left;">')
+                    in_ul = True
+                html_lines.append(f'<li>{line.lstrip("- *")}</li>')
+            elif re.match(r'^\s*\d+\.\s+', line):  # Detectar listas ordenadas
+                if not in_ol:
+                    if in_ul:
+                        html_lines.append('</ul>')
+                        in_ul = False
+                    html_lines.append('<ol style="text-align: left;">')
+                    in_ol = True
+                html_lines.append(f'<li>{line.lstrip("0123456789.")}</li>')
+            else:
+                if in_ul:
+                    html_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    html_lines.append('</ol>')
+                    in_ol = False
+                html_lines.append(line)
+
+        if in_ul:
+            html_lines.append('</ul>')
+        if in_ol:
+            html_lines.append('</ol>')
+
+        return '\n'.join(html_lines)
+
+    markdown_content = convert_lists_to_html(markdown_content)
+
     code_block_pattern = re.compile(r'```(.*?)```', re.DOTALL)
 
     def replace_code_block(match):
@@ -81,15 +125,6 @@ def convert_markdown_to_blogger():
     html_content = markdown.markdown(markdown_content, extensions=['fenced_code', 'tables'])
 
     soup = BeautifulSoup(html_content, 'html.parser')
-
-    # Procesar listas para convertir correctamente a HTML
-    def process_lists():
-        for list_tag in soup.find_all(['ul', 'ol']):
-            list_tag['style'] = "text-align: left;"
-            for item in list_tag.find_all('li'):
-                item.string = item.text.strip()
-
-    process_lists()
 
     # Procesar tablas
     for table in soup.find_all('table'):
