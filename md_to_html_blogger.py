@@ -7,6 +7,8 @@ import os
 import json
 
 # Función para cargar la configuración
+# Esta función verifica si existe un archivo de configuración llamado 'save.json'.
+# Si no existe o está vacío, crea uno con valores predeterminados.
 def load_config():
     default_config = {
         "code_box": '<pre class="linux-code" style="background: url(https://lh3.googleusercontent.com/-E2WZ-k5ArbU/VnnAeX-_qmI/AAAAAAAABDU/i1aaUUYLZh8/s540-Ic42/lincodewachin.gif) 0px 0px no-repeat scroll rgb(231, 232, 233); border-color: rgb(214, 73, 55); border-style: solid; border-width: 1px 1px 1px 20px; font-family: \"UbuntuBeta Mono\", \"Ubuntu Mono\", \"Courier New\", Courier, monospace; font-size: medium; line-height: 22.4px; margin: 10px; max-height: 500px; min-height: 16px; overflow: auto; padding: 28px 10px 10px; z-index: 10000;"><code>{code}</code></pre>'
@@ -23,16 +25,18 @@ def load_config():
         return default_config
 
 # Función para guardar la configuración
+# Toma el valor de una entrada de texto en la interfaz y lo guarda en 'save.json'.
 def save_config():
     config = {"code_box": code_box_entry.get()}
     with open('save.json', 'w') as f:
         json.dump(config, f)
     status_label.config(text="Configuración guardada")
 
-# Cargar la configuración
+# Cargar la configuración inicial
 config = load_config()
 
 def select_input_file():
+    # Permite al usuario seleccionar un archivo Markdown de entrada.
     initial_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Conversiones")
     file_path = filedialog.askopenfilename(
         initialdir=initial_dir,
@@ -42,12 +46,13 @@ def select_input_file():
         input_entry.delete(0, tk.END)
         input_entry.insert(0, file_path)
 
-        # Actualizar automáticamente el campo de salida
+        # Autogenera el nombre del archivo de salida con extensión .html
         output_path = os.path.splitext(file_path)[0] + ".html"
         output_entry.delete(0, tk.END)
         output_entry.insert(0, output_path)
 
 def select_output_file():
+    # Permite al usuario seleccionar la ubicación y el nombre del archivo HTML de salida.
     initial_file = output_entry.get()
     file_path = filedialog.asksaveasfilename(
         initialfile=os.path.basename(initial_file),
@@ -59,15 +64,64 @@ def select_output_file():
         output_entry.insert(0, file_path)
 
 def convert_markdown_to_blogger():
+    # Convierte el contenido de un archivo Markdown a HTML estilizado para Blogger.
     input_file = input_entry.get()
     output_file = output_entry.get()
 
     with open(input_file, 'r', encoding='utf-8') as md_file:
         markdown_content = md_file.read()
 
+    # Detectar y convertir listas en el Markdown manualmente
+    def convert_lists_to_html(md_content):
+        # Convierte listas no ordenadas y ordenadas en HTML usando etiquetas <ul>, <ol>, <li>.
+        lines = md_content.splitlines()
+        html_lines = []
+        in_ul = False
+        in_ol = False
+
+        for line in lines:
+            line = line.rstrip()
+
+            if re.match(r'^\s*[-*]\s+', line):  # Detectar listas no ordenadas
+                if not in_ul:
+                    if in_ol:
+                        html_lines.append('</ol>')
+                        in_ol = False
+                    html_lines.append('<ul style="text-align: left;">')
+                    in_ul = True
+                html_lines.append(f'<li>{line.lstrip("- *")}</li>')
+            elif re.match(r'^\s*\d+\.\s+', line):  # Detectar listas ordenadas
+                if not in_ol:
+                    if in_ul:
+                        html_lines.append('</ul>')
+                        in_ul = False
+                    html_lines.append('<ol style="text-align: left;">')
+                    in_ol = True
+                html_lines.append(f'<li>{line.lstrip("0123456789.")}</li>')
+            else:
+                # Cierra las listas si se encuentra con una línea que no es parte de ellas.
+                if in_ul:
+                    html_lines.append('</ul>')
+                    in_ul = False
+                if in_ol:
+                    html_lines.append('</ol>')
+                    in_ol = False
+                html_lines.append(line)
+
+        if in_ul:
+            html_lines.append('</ul>')
+        if in_ol:
+            html_lines.append('</ol>')
+
+        return '\n'.join(html_lines)
+
+    markdown_content = convert_lists_to_html(markdown_content)
+
+    # Patrón para bloques de código rodeados por ```
     code_block_pattern = re.compile(r'```(.*?)```', re.DOTALL)
 
     def replace_code_block(match):
+        # Convierte el contenido del bloque de código en una caja de estilo HTML.
         code = match.group(1).strip()
         code = re.sub(r'&', '&amp;', code)
         code = re.sub(r'<', '&lt;', code)
@@ -84,17 +138,22 @@ def convert_markdown_to_blogger():
 
     # Procesar tablas
     for table in soup.find_all('table'):
+        # Aplica estilos a las tablas generadas en HTML.
         table['style'] = "border-collapse: collapse; width: 100%;"
         for i, row in enumerate(table.find_all('tr')):
             row['style'] = "background-color: #f2f2f2;" if i % 2 == 0 else "background-color: #ffffff;"
         for cell in table.find_all(['th', 'td']):
             cell['style'] = "border: 1px solid #ddd; padding: 8px; text-align: left;"
 
-        # Envolver la tabla en un bloque de desplazamiento
-        wrapper = soup.new_tag('div', style="overflow-x: auto; margin: 10px 0;")
+        # Envolver la tabla en un bloque desplazable para facilitar la visualización.
+        wrapper = soup.new_tag('pre', **{
+            "class": "table-code-box",
+            "style": "background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd; overflow-x: auto;"
+        })
         table.insert_before(wrapper)
         wrapper.append(table.extract())
 
+    # Aplicar estilos adicionales según las configuraciones seleccionadas
     if var_headers.get():
         for i in range(1, 7):
             for tag in soup.find_all(f'h{i}'):
