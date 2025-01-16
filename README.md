@@ -201,3 +201,11 @@ también añado una captura por Shutter:
 Este manual proporciona una guía completa para que los usuarios puedan instalar, configurar y utilizar este programa de conversión de Markdown a HTML para Blogger. Puedes ajustar o expandir cualquier sección según las necesidades específicas
 
 Dios les bendiga
+
+# Consultas
+
+**markdowntohtml.com**
+[https://markdowntohtml.com/](https://markdowntohtml.com/)
+
+**Markdown Cheatsheet**  
+[https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
