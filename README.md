@@ -10,8 +10,8 @@ Para sistemas Linux basados en Debian o Ubuntu, necesitas instalar las siguiente
 sudo apt install python3-bs4 python3-markdown python3-tk tk-dev
 ```
 
-## Consejos para tener en cuenta en el archivo markdown
-1.- Cuando usted copie ejemplo un codigo así
+## Cuando conviarta cajas de codigo markdown a html debe borrar la etiqueta antes de convertir
+1.- Cuando usted copie ejemplo una caja de codigo como la siguiente que tiene la etiqueta "python":
 
 ~~~~
 ```python
@@ -33,13 +33,36 @@ def check_requests():
 ```
 ~~~~
 
-porque de lo contrario la palabra python se pasará a la caja de código y si el que copia el código copia esa palabra y la ejecuta ejemplo en un script ya no funcionará
+porque de lo contrario la palabra python se pasará a la caja de código y si el que copia el código (pues este programa está dirigido a que otras personas copien en el Blog el tutorial y código de las cajas de código) copia esa palabra y la ejecuta ejemplo en un script ya no funcionará. 
 
-lo mismo haga si ve la palabra:
+lo mismo haga si ve la palabra "bash":
 
-bash
+~~~~
+```bash
+#!/bin/bash
 
-dos
+echo "¡Hola! ¿Cómo te llamas?"
+read nombre
+echo "Hola, $nombre. ¡Bienvenido al mundo de Bash!"
+echo "La fecha y hora actual es: $(date)"
+```
+~~~~
+
+o también "dos"
+
+~~~~
+```dos
+@echo off
+echo ¡Hola! ¿Cómo te llamas?
+set /p nombre=Ingresa tu nombre: 
+echo Hola, %nombre%. ¡Bienvenido al mundo de DOS!
+echo La fecha y hora actual es: %date% %time%
+pause
+
+```
+~~~~
+
+etc.
 
 borrelas porque después en la conversión se pasa al código.
 
