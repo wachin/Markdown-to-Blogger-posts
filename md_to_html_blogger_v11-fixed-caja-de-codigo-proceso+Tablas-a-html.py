@@ -4,6 +4,7 @@ from tkinter import messagebox
 import os
 import json
 import re
+from bs4 import BeautifulSoup
 import html
 
 def load_config():
@@ -210,10 +211,43 @@ def convert_markdown_to_blogger():
 
         # Convertir encabezados
         content_with_headers = convert_headers_to_html(markdown_content)
-        
+
+        # Función para convertir tablas Markdown a HTML
+        def convert_markdown_table_to_html(md_content):
+            table_pattern = re.compile(
+                r'(?:^|\n)\|(.+?)\|\n\|([ \-:|]+)\|\n((?:\|.*?\|\n)+)',  # Tabla con encabezados, separadores y filas
+                re.MULTILINE
+            )
+
+            def format_table(match):
+                header = match.group(1).split('|')
+                separator = match.group(2)
+                rows = [row.split('|') for row in match.group(3).strip().split('\n')]
+
+                thead = '<thead><tr style="background-color: #f2f2f2;">' + ''.join(
+                    f'<th style="border: 1px solid #ddd; padding: 8px; text-align: left;">{html.escape(cell.strip())}</th>'
+                    for cell in header
+                ) + '</tr></thead>'
+
+                tbody = '<tbody>' + ''.join(
+                    f'<tr style="background-color: {"#f2f2f2" if i % 2 == 0 else "#ffffff"};">' +
+                    ''.join(
+                        f'<td style="border: 1px solid #ddd; padding: 8px; text-align: left;">{html.escape(cell.strip())}</td>'
+                        for cell in row
+                    ) + '</tr>'
+                    for i, row in enumerate(rows)
+                ) + '</tbody>'
+
+                return f'<table style="border-collapse: collapse; width: 100%;">{thead}{tbody}</table>'
+
+            return table_pattern.sub(format_table, md_content)
+
+        # Convertir tablas Markdown a HTML
+        content_with_tables = convert_markdown_table_to_html(content_with_headers)
+
         # Separar el contenido en secciones (entre encabezados)
-        sections = re.split(r'(<h[1-6].*?</h[1-6]>)', content_with_headers)
-        
+        sections = re.split(r'(<h[1-6].*?</h[1-6]>)', content_with_tables)
+
         # Procesar cada sección
         processed_sections = []
         for section in sections:
@@ -222,7 +256,7 @@ def convert_markdown_to_blogger():
                     processed_sections.append(section)
                 else:
                     processed_sections.append(convert_text_to_paragraphs(section))
-        
+
         # Unir todo el contenido
         html_content = ''.join(processed_sections)
 
@@ -234,6 +268,19 @@ def convert_markdown_to_blogger():
                 code_content = re.sub(r'^[a-zA-Z0-9]+\n', '', code_content)
             formatted_block = replace_code_block(re.match(r'(.*)', code_content, re.DOTALL), code_box_template)
             html_content = html_content.replace(f"CODE_BLOCK_{i}", formatted_block)
+
+        # Procesar tablas en el HTML con estilos adicionales
+        soup = BeautifulSoup(html_content, 'html.parser')
+        for table in soup.find_all('table'):
+            # Envolver la tabla en un bloque desplazable para facilitar la visualización.
+            wrapper = soup.new_tag('pre', **{
+                "class": "table-code-box",
+                "style": "background-color: #f9f9f9; padding: 10px; border: 1px solid #ddd; overflow-x: auto;"
+            })
+            table.insert_before(wrapper)
+            wrapper.append(table.extract())
+
+        html_content = str(soup)
 
         # Limpiar el HTML
         html_content = cleanup_html(html_content)
