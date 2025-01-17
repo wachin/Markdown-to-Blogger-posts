@@ -1,5 +1,20 @@
 # Py_MD_to_HTML_Blogger | Manual de Usuario: Conversor de Markdown a HTML para Blogger
 
+
+# Clases
+Esto es una parte
+
+del texto
+
+que yo quiero ver  
+
+## Escuela grafica
+espero que
+siempre
+se
+vea bien
+
+
 ## Descripción
 Este programa convierte archivos Markdown (.md) a HTML optimizado para Blogger, incluyendo una caja de código personalizada.
 
