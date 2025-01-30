@@ -116,7 +116,7 @@ Y esto también ocurrirá en Github, por eso es un buen consejo.
 2.) Ejecuta el programa con el comando:
 
 ```
-   python3 md_to_blogger.py
+   python3 md_to_html_blogger.py
 ```
 
 pongo una imagen para mejor entendimiento:
