@@ -277,13 +277,13 @@ save_button = tk.Button(root, text="Guardar configuración", command=save_config
 save_button.grid(row=10, column=2, padx=5, pady=5)
 
 convert_button = tk.Button(root, text="Convertir", command=convert_markdown_to_blogger)
-convert_button.grid(row=11, column=1, pady=2)
+convert_button.grid(row=11, column=1, pady=6)
 
 status_label = tk.Label(root, text="")
-status_label.grid(row=12, column=0, columnspan=3, pady=5)
+status_label.grid(row=14, column=0, columnspan=3, pady=3)
 
 # Botón "Acerca de"
 about_button = ttk.Button(root, text="Acerca de...", command=show_about)
-about_button.grid(row=12, column=1, pady=6)
+about_button.grid(row=18, column=1, pady=10)
 
 root.mainloop()

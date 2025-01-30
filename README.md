@@ -1,18 +1,54 @@
 # Py_MD_to_HTML_Blogger | Manual de Usuario: Conversor de Markdown a HTML para Blogger
 
 
-# Clases
-Esto es una parte
 
-del texto
+**Example of a bulleted list**
 
-que yo quiero ver  
+Autoimmune mechanism
 
-## Escuela grafica
-espero que
-siempre
-se
-vea bien
+* The bacteria could damege
+* Current evidence.
+* Damage your stomach.
+
+The presence of H. pylori has not been established.
+
+If you suspect that you have H. pylori and problems
+
+**Example of a numbered list**
+
+Limitations:
+
+1. Variability in detection methods
+2. Different criteria to define active RA
+3. Possible uncontrolled confounders
+4. Relatively small sample sizes in some studies
+
+Lack of longitudinal follow-up
+
+**Example of a paragraph**
+
+This is a part 
+
+of the text that 
+
+I want to see 
+
+**Example of a paragraph with a line break**
+
+I hope that  
+it  
+always  
+looks good  
+
+
+esto en html para Blogger debe quedar así:
+
+```html
+<<p><b>Example of a bulleted list</b><br /><br />Autoimmune mechanism</p><ul style="text-align: left;"><li>The bacteria could damege</li><li>Current evidence.</li><li>Damage your stomach.</li></ul><p>The presence of H. pylori has not been established.<br /><br />If you suspect that you have H. pylori and problems<br /><br /><b>Example of a numbered list</b><br /><br />Limitations:<br /></p><ol style="text-align: left;"><li>Variability in detection methods</li><li>Different criteria to define active RA</li><li>Possible uncontrolled confounders</li><li>Relatively small sample sizes in some studies</li></ol><p>Lack of longitudinal follow-up<br /><br /><b>Example of a paragraph</b><br /><br />This is a part&nbsp;</p><p>of the text that&nbsp;</p><p>I want to see</p><p><b>Example of a paragraph with a line break</b><br /><br />I hope that<br />it<br />always<br />looks good<br /><br /></p>
+```
+
+
+
 
 
 ## Descripción
